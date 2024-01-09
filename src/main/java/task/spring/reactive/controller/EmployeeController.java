@@ -19,12 +19,12 @@ import task.spring.reactive.service.EmployeeService;
 public class EmployeeController {
     EmployeeService employeeService;
 
-    @GetMapping("/{id}")
-    public Mono<Employee> getEmployeeById(@PathVariable Long id) {
+    @GetMapping(params = {"id"})
+    public Mono<Employee> getEmployeeById(@RequestParam Long id) {
         return employeeService.getEmployeeById(id);
     }
 
-    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE, params = {})
     public Flux<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
@@ -41,5 +41,12 @@ public class EmployeeController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(employeeService.replaceEmployee(employee).then());
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Mono<Void>> deleteEmployee(@RequestParam Long id){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(employeeService.removeEmployee(id));
     }
 }

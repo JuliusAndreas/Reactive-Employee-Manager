@@ -34,4 +34,8 @@ public class EmployeeService {
         }
         return employeeRepository.save(employee);
     }
+
+    public Mono<Void> removeEmployee(Long id) {
+        return employeeRepository.deleteById(id);
+    }
 }
