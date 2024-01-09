@@ -1,21 +1,24 @@
 package task.spring.reactive.data.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Table;
+import task.spring.reactive.util.ModelValidator;
 
 @Data
-@Entity
-@Table(name = "employee")
+@Table
 @NoArgsConstructor
-public class Employee {
+public class Employee implements Persistable<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Name can not be empty")
     @NotNull(message = "Name can not be empty")
@@ -38,6 +41,9 @@ public class Employee {
     @NotEmpty(message = "Email cannot be empty")
     private String email;
 
+    @JsonIgnore
+    @Transient
+    private boolean newEmployee;
 
     @JsonCreator
     public Employee(@JsonProperty("name") String name, @JsonProperty("salary") Double salary,
@@ -45,6 +51,19 @@ public class Employee {
         this.email = email;
         this.fullName = name;
         this.salary = salary;
+        ModelValidator.validate(this);
+    }
+
+    @JsonIgnore
+    @Override
+    @Transient
+    public boolean isNew() {
+        return this.newEmployee || id == null;
+    }
+
+    public Employee setAsNew() {
+        this.newEmployee = true;
+        return this;
     }
 
 }

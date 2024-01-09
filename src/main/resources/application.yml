@@ -1,6 +1,6 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5433/office
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5433/office
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver

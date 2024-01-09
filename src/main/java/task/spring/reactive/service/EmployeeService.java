@@ -19,7 +19,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Mono<Employee> getEmployeeById(Integer id) {
+    public Mono<Employee> getEmployeeById(Long id) {
         return employeeRepository.findById(id);
     }
 
