@@ -1,29 +1,37 @@
 package task.spring.reactive.controller;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import task.spring.reactive.data.model.Employee;
-import task.spring.reactive.data.repository.EmployeeRepository;
+import task.spring.reactive.service.EmployeeService;
 
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-    private final EmployeeRepository employeeRepository;
+    EmployeeService employeeService;
 
     @GetMapping("/{id}")
-    public Mono<String> getEmployeeById(@PathVariable String id) {
-        return Mono.just("Hi");
+    public Mono<Employee> getEmployeeById(@PathVariable Integer id) {
+        return employeeService.getEmployeeById(id);
     }
 
     @GetMapping
     public Flux<Employee> getAllEmployees() {
-//        return employeeRepository.findAllEmployees();
+        return employeeService.getAllEmployees();
     }
 
+    @PostMapping
+    public <T> ResponseEntity<T> addEmployee(@RequestBody Employee employee) {
+        employeeService.addEmployee(employee);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
