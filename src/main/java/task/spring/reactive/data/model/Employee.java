@@ -13,7 +13,6 @@ import org.springframework.data.relational.core.mapping.Table;
 import task.spring.reactive.util.ModelValidator;
 
 @Data
-@Table
 @NoArgsConstructor
 public class Employee implements Persistable<Long> {
 

@@ -23,7 +23,7 @@ public class EmployeeService {
         return employeeRepository.findById(id);
     }
 
-    public void addEmployee(Employee employee) {
-        employeeRepository.save(employee);
+    public Mono<Employee> addEmployee(final Employee employee) {
+        return employeeRepository.save(employee);
     }
 }
