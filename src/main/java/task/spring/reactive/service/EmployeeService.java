@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import task.spring.reactive.data.dto.InvalidInputException;
 import task.spring.reactive.data.model.Employee;
 import task.spring.reactive.data.repository.EmployeeRepository;
 
@@ -24,6 +25,13 @@ public class EmployeeService {
     }
 
     public Mono<Employee> addEmployee(final Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    public Mono<Employee> replaceEmployee(Employee employee) {
+        if (employee.getId() == null) {
+            throw new InvalidInputException("No id was provided to update the employee");
+        }
         return employeeRepository.save(employee);
     }
 }

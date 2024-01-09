@@ -35,4 +35,11 @@ public class EmployeeController {
                 .status(HttpStatus.OK)
                 .body(employeeService.addEmployee(employee).then());
     }
+
+    @PutMapping
+    public ResponseEntity<Mono<Void>> replaceEmployee(@RequestBody Employee employee) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(employeeService.replaceEmployee(employee).then());
+    }
 }
